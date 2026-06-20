@@ -288,16 +288,6 @@ src/
 
 Created by **Yves de Sá Barbosa**.
 
-🔗 [LinkedIn](https://www.google.com/url?sa=E&source=gmail&q=https://www.linkedin.com/in/SEU_LINKEDIN_AQUI)
-
-🔗 [Portfolio](https://www.google.com/search?q=https://SEU_PORTFOLIO_AQUI)
-
 ## License
 
 MIT
-
-```
-
-Lembre-se apenas de trocar os `SEU_LINKEDIN_AQUI` e `SEU_PORTFOLIO_AQUI` pelos seus links reais. Quando der o commit, o seu NPM vai ficar com um nível de profissionalismo altíssimo!</AppModes></AppModes></AppModes></TMode></AppModes></AppModes></AppModes>
-
-```
