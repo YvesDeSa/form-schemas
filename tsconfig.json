@@ -1,0 +1,41 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+
+    // "bundler" = substituto moderno de "node" no TS 5.x.
+    // Suporta o prefixo "node:" nos imports e não está depreciado.
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+
+    "lib": ["ES2020"],
+    "types": ["node"],
+
+    // Necessário para que decorators legados (Reflect.metadata) funcionem
+    // corretamente no TypeScript 5.x sem colidir com os Stage-3 decorators.
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "useDefineForClassFields": false,
+
+    // Saída (usada pelo tsc --noEmit e geração de .d.ts via tsup)
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+
+    // Rigor de tipos
+    "strict": true,
+    "strictNullChecks": true,
+    "noImplicitAny": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+
+    // Interop e compatibilidade
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "**/*.spec.ts", "**/*.test.ts"]
+}

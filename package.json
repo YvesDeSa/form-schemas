@@ -1,0 +1,63 @@
+{
+  "name": "@dsyves/nest-form-schema",
+  "version": "0.1.0",
+  "description": "Server-Driven UI form schema generator for NestJS. Reads UI decorators on DTO classes and produces typed, frontend-ready JSON form schemas.",
+  "author": "YvesDeSa",
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "rimraf dist && tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "npx ts-node --require reflect-metadata -P tsconfig.test.json src/__tests__/schema-generator.spec.ts",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "nestjs",
+    "form-schema",
+    "server-driven-ui",
+    "sdui",
+    "decorators",
+    "metadata",
+    "typescript",
+    "lca",
+    "dynamic-forms"
+  ],
+  "peerDependencies": {
+    "@nestjs/common": ">=9.0.0",
+    "reflect-metadata": ">=0.1.13"
+  },
+  "devDependencies": {
+    "@nestjs/common": "^11.1.27",
+    "@nestjs/core": "^11.1.27",
+    "@swc/core": "^1.15.41",
+    "@types/node": "^22.20.0",
+    "reflect-metadata": "^0.2.2",
+    "rimraf": "^6.0.0",
+    "rxjs": "^7.8.2",
+    "ts-node": "^10.9.2",
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YvesDeSa/form-schemas.git"
+  },
+  "bugs": {
+    "url": "https://github.com/YvesDeSa/form-schemas/issues"
+  },
+  "homepage": "https://github.com/YvesDeSa/form-schemas#readme"
+}

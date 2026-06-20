@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    // ts-node precisa de CommonJS para rodar .ts diretamente no Node.js.
+    // O tsconfig.json raiz usa ESNext (para o bundler), mas aqui sobrescrevemos
+    // apenas para o runner de testes — não afeta o build de produção.
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "noEmit": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}
