@@ -1,5 +1,5 @@
 /**
- * @dsyves/nest-form-schema
+ * @dsyves/form-schema
  *
  * Public API barrel. Import everything from this single entry point.
  *
@@ -12,7 +12,7 @@
  *   UINumber,
  *   UISelect,
  *   UIFile,
- * } from '@dsyves/nest-form-schema';
+ * } from '@dsyves/form-schema';
  * ```
  */
 

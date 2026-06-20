@@ -1,5 +1,5 @@
 /**
- * @dsyves/nest-form-schema - Integration Tests
+ * @dsyves/form-schema - Integration Tests
  *
  * These tests exercise the complete pipeline end-to-end:
  *   Decorator → Reflect.metadata → SchemaGeneratorService → UIFormSchema
@@ -25,21 +25,21 @@ import {
 // Custom mode type (demonstrates Generic extensibility)
 // ─────────────────────────────────────────────
 
-type ModosLCA = 'create' | 'update' | 'view' | 'audit_transporte';
+type AppModes = 'create' | 'update' | 'view' | 'audit_transporte';
 
 // ─────────────────────────────────────────────
 // Sample DTOs
 // ─────────────────────────────────────────────
 
 class ExtractStoneDto {
-  @UIString<ModosLCA>({
+  @UIString<AppModes>({
     label: 'Identificador do Bloco',
     editableIn: ['create'],
     required: true,
   })
   blockId!: string;
 
-  @UINumber<ModosLCA>({
+  @UINumber<AppModes>({
     label: 'Peso (Toneladas)',
     required: true,
     min: 0,
@@ -47,7 +47,7 @@ class ExtractStoneDto {
   })
   weight!: number;
 
-  @UISelect<ModosLCA>({
+  @UISelect<AppModes>({
     label: 'Tipo de Material',
     options: [
       { label: 'Mármore', value: 'marmore' },
@@ -56,7 +56,7 @@ class ExtractStoneDto {
   })
   materialType!: string;
 
-  @UIFile<ModosLCA>({
+  @UIFile<AppModes>({
     label: 'Nota Fiscal de Transporte',
     accept: ['.pdf', 'image/jpeg', 'image/png'],
     maxSizeMb: 5,
@@ -67,7 +67,7 @@ class ExtractStoneDto {
 }
 
 class TransporteDto {
-  @UIString<ModosLCA>({
+  @UIString<AppModes>({
     label: 'Placa do Caminhão',
     required: true,
     minLength: 7,
@@ -78,16 +78,16 @@ class TransporteDto {
   })
   placa!: string;
 
-  @UIEmail<ModosLCA>({ label: 'E-mail do Motorista' })
+  @UIEmail<AppModes>({ label: 'E-mail do Motorista' })
   driverEmail!: string;
 
-  @UIDate<ModosLCA>({ label: 'Data de Saída', withTime: true })
+  @UIDate<AppModes>({ label: 'Data de Saída', withTime: true })
   departureAt!: Date;
 
-  @UICheckbox<ModosLCA>({ label: 'Carga Perigosa?' })
+  @UICheckbox<AppModes>({ label: 'Carga Perigosa?' })
   isDangerous!: boolean;
 
-  @UITextarea<ModosLCA>({ label: 'Observações', maxLength: 1000 })
+  @UITextarea<AppModes>({ label: 'Observações', maxLength: 1000 })
   notes!: string;
 }
 

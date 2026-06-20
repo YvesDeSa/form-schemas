@@ -1,5 +1,5 @@
 /**
- * @dsyves/nest-form-schema - Decorators
+ * @dsyves/form-schema - Decorators
  *
  * All UI decorators use the same internal mechanism:
  *   1. Store per-field metadata on the property key via Reflect.defineMetadata.

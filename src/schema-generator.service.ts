@@ -1,5 +1,5 @@
 /**
- * @dsyves/nest-form-schema - Schema Generator Service
+ * @dsyves/form-schema - Schema Generator Service
  *
  * The brain of the library. Reads reflect-metadata stored by the decorators,
  * crosses it with the requested mode, applies the disabled/editable logic,
@@ -82,7 +82,7 @@ export class SchemaGeneratorService {
 
     if (fieldKeys.length === 0) {
       throw new Error(
-        `[nest-form-schema] No UI-decorated properties found on "${DtoClass.name}". ` +
+        `[form-schema] No UI-decorated properties found on "${DtoClass.name}". ` +
           'Did you forget to apply @UIString, @UINumber, or another UI decorator?',
       );
     }
@@ -125,7 +125,7 @@ export class SchemaGeneratorService {
     if (!meta) {
       // Defensive: should never happen if the list was built correctly
       throw new Error(
-        `[nest-form-schema] Missing metadata for property "${key}". This is an internal error.`,
+        `[form-schema] Missing metadata for property "${key}". This is an internal error.`,
       );
     }
 

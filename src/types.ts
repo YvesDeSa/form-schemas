@@ -1,5 +1,5 @@
 /**
- * @dsyves/nest-form-schema - Core Types
+ * @dsyves/form-schema - Core Types
  *
  * Defines all interfaces and types used across the library.
  * The generic parameter <TMode> is the cornerstone of extensibility:

@@ -1,5 +1,5 @@
 /**
- * @dsyves/nest-form-schema - NestJS Dynamic Module
+ * @dsyves/form-schema - NestJS Dynamic Module
  *
  * Wraps the SchemaGeneratorService in a proper NestJS module so it can be
  * injected anywhere in the consuming application via standard DI.
@@ -7,7 +7,7 @@
  * ### Sync usage (forRoot)
  * ```ts
  * // app.module.ts
- * import { SchemaModule } from '@dsyves/nest-form-schema';
+ * import { SchemaModule } from '@dsyves/form-schema';
  *
  * @Module({
  *   imports: [SchemaModule.forRoot()],

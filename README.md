@@ -1,4 +1,4 @@
-# @dsyves/nest-form-schema
+# @dsyves/form-schema
 
 > **Server-Driven UI** form schema generator for NestJS.  
 > Decorate your DTO properties — the library generates the JSON schema for your Frontend.
@@ -18,7 +18,7 @@ Invert control. The Frontend stops hardcoding form rules. The Backend becomes th
 ## Installation
 
 ```bash
-npm install @dsyves/nest-form-schema reflect-metadata
+npm install @dsyves/form-schema reflect-metadata
 ```
 
 > ⚠️ Make sure `reflect-metadata` is imported **once** at the top of your application entry point (e.g., `main.ts`):
@@ -33,7 +33,8 @@ Also enable these flags in your `tsconfig.json`:
 {
   "compilerOptions": {
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "useDefineForClassFields": false
   }
 }
 ```
@@ -46,7 +47,7 @@ Also enable these flags in your `tsconfig.json`:
 
 ```ts
 // app.module.ts
-import { SchemaModule } from '@dsyves/nest-form-schema';
+import { SchemaModule } from '@dsyves/form-schema';
 
 @Module({
   imports: [SchemaModule.forRoot()],
@@ -57,35 +58,35 @@ export class AppModule {}
 ### 2. Decorate your DTO
 
 ```ts
-// extract-stone.dto.ts
-import { UIString, UINumber, UISelect } from '@dsyves/nest-form-schema';
+// product.dto.ts
+import { UIString, UINumber, UISelect } from '@dsyves/form-schema';
 
-type ModosLCA = 'create' | 'update' | 'view' | 'audit_transporte';
+type AppModes = 'create' | 'update' | 'view' | 'audit';
 
-export class ExtractStoneDto {
-  @UIString<ModosLCA>({
-    label: 'Identificador do Bloco',
-    editableIn: ['create'],   // disabled in update/view
+export class ProductDto {
+  @UIString<AppModes>({
+    label: 'Product Code',
+    editableIn: ['create'],   // disabled in update/view/audit
     required: true,
   })
-  blockId: string;
+  code: string;
 
-  @UINumber<ModosLCA>({
-    label: 'Peso (Toneladas)',
+  @UINumber<AppModes>({
+    label: 'Weight (kg)',
     required: true,
     min: 0,
     max: 999,
   })
   weight: number;
 
-  @UISelect<ModosLCA>({
-    label: 'Tipo de Material',
+  @UISelect<AppModes>({
+    label: 'Category',
     options: [
-      { label: 'Mármore', value: 'marmore' },
-      { label: 'Granito', value: 'granito' },
+      { label: 'Electronics', value: 'electronics' },
+      { label: 'Furniture', value: 'furniture' },
     ],
   })
-  materialType: string;
+  category: string;
 }
 ```
 
@@ -94,16 +95,16 @@ export class ExtractStoneDto {
 ```ts
 // form.controller.ts
 import { Controller, Get, Query } from '@nestjs/common';
-import { SchemaGeneratorService } from '@dsyves/nest-form-schema';
-import { ExtractStoneDto } from './extract-stone.dto';
+import { SchemaGeneratorService } from '@dsyves/form-schema';
+import { ProductDto } from './product.dto';
 
 @Controller('forms')
 export class FormController {
   constructor(private readonly schemaGenerator: SchemaGeneratorService) {}
 
-  @Get('extract-stone')
+  @Get('product')
   getSchema(@Query('mode') mode: string) {
-    return this.schemaGenerator.generate(ExtractStoneDto, {
+    return this.schemaGenerator.generate(ProductDto, {
       currentMode: mode ?? 'create',
     });
   }
@@ -114,31 +115,31 @@ export class FormController {
 
 ```json
 {
-  "formName": "ExtractStoneDto",
+  "formName": "ProductDto",
   "requestedMode": "update",
   "fields": [
     {
-      "name": "blockId",
+      "name": "code",
       "type": "string",
-      "label": "Identificador do Bloco",
+      "label": "Product Code",
       "disabled": true,
       "validations": { "required": true }
     },
     {
       "name": "weight",
       "type": "number",
-      "label": "Peso (Toneladas)",
+      "label": "Weight (kg)",
       "disabled": false,
       "validations": { "required": true, "min": 0, "max": 999 }
     },
     {
-      "name": "materialType",
+      "name": "category",
       "type": "select",
-      "label": "Tipo de Material",
+      "label": "Category",
       "disabled": false,
       "options": [
-        { "label": "Mármore", "value": "marmore" },
-        { "label": "Granito", "value": "granito" }
+        { "label": "Electronics", "value": "electronics" },
+        { "label": "Furniture", "value": "furniture" }
       ]
     }
   ]
@@ -188,15 +189,15 @@ Instead of a closed enum, the library uses **Generic Literal Types**. This means
 
 ```ts
 // Your project defines its own modes
-type ModosLCA = 'create' | 'update' | 'view' | 'audit_transporte';
+type AppModes = 'create' | 'update' | 'view' | 'audit';
 
-export class TransporteDto {
-  @UIString<ModosLCA>({
-    label: 'Placa do Caminhão',
-    editableIn: ['create', 'audit_transporte'],  // ✅ TypeScript autocomplete!
-    // editableIn: ['wrong_mode'],               // ❌ compile-time error
+export class ShipmentDto {
+  @UIString<AppModes>({
+    label: 'Tracking Code',
+    editableIn: ['create', 'audit'],  // ✅ TypeScript autocomplete!
+    // editableIn: ['wrong_mode'],    // ❌ compile-time error
   })
-  placa: string;
+  trackingCode: string;
 }
 ```
 
@@ -205,24 +206,26 @@ export class TransporteDto {
 ## Advanced Example
 
 ```ts
-export class TransporteDto {
-  @UIString<ModosLCA>({
-    label: 'Placa do Caminhão',
+type AppModes = 'create' | 'update' | 'view' | 'audit';
+
+export class ShipmentDto {
+  @UIString<AppModes>({
+    label: 'License Plate',
     required: true,
     minLength: 7,
     maxLength: 7,
     pattern: '^[A-Z]{3}[0-9][A-Z0-9][0-9]{2}$',
     placeholder: 'ABC1D23',
-    editableIn: ['create', 'audit_transporte'],
+    editableIn: ['create', 'audit'],
   })
-  placa: string;
+  licensePlate: string;
 
-  @UIFile<ModosLCA>({
-    label: 'Nota Fiscal de Transporte',
+  @UIFile<AppModes>({
+    label: 'Invoice',
     accept: ['.pdf', 'image/jpeg', 'image/png'],
     maxSizeMb: 5,
     multiple: false,
-    editableIn: ['create', 'audit_transporte'],
+    editableIn: ['create', 'audit'],
   })
   invoiceFile: any;
 }
@@ -232,9 +235,9 @@ Generated JSON for `mode=update`:
 
 ```json
 {
-  "name": "truckPlate",
+  "name": "licensePlate",
   "type": "string",
-  "label": "Placa do Caminhão",
+  "label": "License Plate",
   "disabled": true,
   "placeholder": "ABC1D23",
   "validations": {
