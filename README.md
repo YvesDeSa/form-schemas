@@ -1,5 +1,11 @@
 # @dsyves/form-schema
 
+[![npm version](https://img.shields.io/npm/v/@dsyves/form-schema.svg?style=flat-square)](https://www.npmjs.com/package/@dsyves/form-schema)
+[![npm downloads](https://img.shields.io/npm/dm/@dsyves/form-schema.svg?style=flat-square)](https://www.npmjs.com/package/@dsyves/form-schema)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178c6.svg?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![NestJS](https://img.shields.io/badge/NestJS-%3E%3D9-e0234e.svg?style=flat-square&logo=nestjs&logoColor=white)](https://nestjs.com/)
+
 > **Server-Driven UI** form schema generator for NestJS.  
 > Decorate your DTO properties — the library generates the JSON schema for your Frontend.
 
