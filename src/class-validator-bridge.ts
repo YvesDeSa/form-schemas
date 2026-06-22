@@ -221,11 +221,18 @@ const CONSTRAINT_HANDLERS: Record<string, ConstraintHandler> = {
   },
 
   // ── Email ────────────────────────────────────────────────────────────────
-  // We intentionally do NOT set a pattern for @IsEmail because
-  // <input type="email"> already enforces RFC-style email format natively.
-  // Consumers who need an explicit regex can pass it via @UIEmail({ pattern }).
-  isEmail: (_constraints, _acc) => {
-    // no-op: browser handles email format validation
+  // Injects a broadly-compatible RFC 5321 email pattern so that custom
+  // frontend renderers that don't use <input type="email"> still validate
+  // the format correctly.
+  // The pattern is only set when no explicit pattern was already provided
+  // (explicit UI decorator options always take precedence).
+  isEmail: (_constraints, acc) => {
+    if (acc.pattern === undefined) {
+      // Covers the vast majority of real-world email addresses:
+      //   local-part @ domain . tld
+      // Intentionally kept simple to avoid false negatives.
+      acc.pattern = '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$';
+    }
   },
 
   // ── Strong password ──────────────────────────────────────────────────────

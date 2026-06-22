@@ -144,10 +144,13 @@ test('@MaxLength(20) → inferred maxLength: 20', () => {
   assert.equal(result.maxLength, 20);
 });
 
-test('@IsEmail → no pattern inferred (input[type=email] handles it)', () => {
+test('@IsEmail → injects standard email pattern', () => {
   const result = inferValidationsFromClassValidator(InferTestDto as never, 'email');
-  // isEmail is a no-op in the bridge; pattern should remain undefined
-  assert.equal(result.pattern, undefined);
+  // @IsEmail now injects a liberal RFC 5321-compatible pattern
+  assert.ok(typeof result.pattern === 'string', 'pattern should be a string');
+  const regex = new RegExp(result.pattern!);
+  assert.ok(regex.test('user@example.com'), 'should match valid email');
+  assert.ok(!regex.test('not-an-email'), 'should reject invalid email');
 });
 
 test('@IsStrongPassword → inferred minLength and pattern', () => {
@@ -212,11 +215,14 @@ test('@UIEmail + @IsEmail → validations.required is true', () => {
   assert.equal(f.validations?.required, true);
 });
 
-test('@UIEmail + @IsEmail → no unwanted pattern injected', () => {
+test('@UIEmail + @IsEmail → pattern is injected', () => {
   const schema = generator.generate(RegisterDto, { currentMode: 'create' });
   const f = schema.fields.find((x) => x.name === 'email')!;
-  // @IsEmail is a no-op in the bridge; pattern must remain undefined
-  assert.equal(f.validations?.pattern, undefined);
+  // @IsEmail now injects a standard email pattern
+  assert.ok(typeof f.validations?.pattern === 'string', 'pattern must be a string');
+  const regex = new RegExp(f.validations!.pattern!);
+  assert.ok(regex.test('user@example.com'), 'valid email must pass');
+  assert.ok(!regex.test('not-an-email'), 'invalid email must fail');
 });
 
 // ─────────────────────────────────────────────
