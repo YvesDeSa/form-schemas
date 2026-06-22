@@ -1,7 +1,7 @@
 {
   "name": "@dsyves/form-schema",
-  "version": "0.2.4",
-  "description": "Server-Driven UI form schema generator for NestJS. Reads UI decorators on DTO classes and produces typed, frontend-ready JSON form schemas.",
+  "version": "0.3.0",
+  "description": "Server-Driven UI form schema generator for NestJS. Reads UI decorators on DTO classes and produces typed, frontend-ready JSON form schemas. Optionally integrates with class-validator to automatically infer validation rules.",
   "author": {
     "name": "Yves de Sá Barbosa",
     "email": "yvesdsbarbosa44@gmail.com"
@@ -26,6 +26,8 @@
     "dev": "tsup --watch",
     "typecheck": "tsc --noEmit",
     "test": "npx ts-node --require reflect-metadata -P tsconfig.test.json src/__tests__/schema-generator.spec.ts",
+    "test:bridge": "npx ts-node --require reflect-metadata -P tsconfig.test.json src/__tests__/class-validator-bridge.spec.ts",
+    "test:all": "npm test && npm run test:bridge",
     "prepublishOnly": "npm run build"
   },
   "keywords": [
@@ -36,17 +38,25 @@
     "decorators",
     "metadata",
     "typescript",
-    "dynamic-forms"
+    "dynamic-forms",
+    "class-validator"
   ],
   "peerDependencies": {
     "@nestjs/common": ">=9.0.0",
+    "class-validator": ">=0.14.0",
     "reflect-metadata": ">=0.1.13"
+  },
+  "peerDependenciesMeta": {
+    "class-validator": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@nestjs/common": "^11.1.27",
     "@nestjs/core": "^11.1.27",
     "@swc/core": "^1.15.41",
     "@types/node": "^22.20.0",
+    "class-validator": "^0.15.1",
     "reflect-metadata": "^0.2.2",
     "rimraf": "^6.0.0",
     "rxjs": "^7.8.2",

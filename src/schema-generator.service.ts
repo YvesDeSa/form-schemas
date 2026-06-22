@@ -12,6 +12,7 @@
 import 'reflect-metadata';
 import { Injectable } from '@nestjs/common';
 import { FIELD_META_KEY, FIELDS_LIST_KEY } from './decorators';
+import { inferValidationsFromClassValidator } from './class-validator-bridge';
 import type {
   UIFieldMetadata,
   UIFileRules,
@@ -92,7 +93,7 @@ export class SchemaGeneratorService {
 
     // ── 3. Map each key to a UIGeneratedField ──────────────────────────────
     const fields: UIGeneratedField[] = fieldKeys.map((key) =>
-      this.resolveField(key, proto, currentMode),
+      this.resolveField(key, proto, currentMode, DtoClass),
     );
 
     // ── 4. Return the immutable schema contract ────────────────────────────
@@ -109,12 +110,20 @@ export class SchemaGeneratorService {
 
   /**
    * Resolves a single field's metadata into a `UIGeneratedField` descriptor.
+   *
+   * When `class-validator` is installed, validation constraints registered on
+   * the same property (e.g. `@IsStrongPassword()`, `@MinLength(8)`) are
+   * automatically inferred and merged into the output `validations` object.
+   * Any value explicitly provided via the UI decorator always takes precedence
+   * over the inferred value.
+   *
    * @internal
    */
   private resolveField(
     key: string,
     proto: object,
     currentMode: string,
+    DtoClass: new (...args: unknown[]) => unknown,
   ): UIGeneratedField {
     const meta: UIFieldMetadata | undefined = Reflect.getMetadata(
       FIELD_META_KEY,
@@ -139,7 +148,14 @@ export class SchemaGeneratorService {
         : false;
 
     // ── Validations object ─────────────────────────────────────────────────
-    const validations = this.buildValidations(meta);
+    // 1. Infer rules from class-validator constraints (optional dependency).
+    //    Returns {} when class-validator is not installed or no constraints
+    //    are found for this property.
+    const inferred = inferValidationsFromClassValidator(DtoClass, key);
+
+    // 2. Build explicit rules from UI decorator options, then merge:
+    //    explicit decorator values override inferred class-validator values.
+    const validations = this.buildValidations(meta, inferred);
 
     // ── Options (select / radio) ───────────────────────────────────────────
     const options: UISelectOption[] | undefined =
@@ -169,21 +185,30 @@ export class SchemaGeneratorService {
   }
 
   /**
-   * Extracts HTML5 validation constraints from field metadata.
-   * Returns `undefined` if the field has no validation rules configured,
-   * keeping the generated JSON lean.
+   * Builds a `UIValidationRules` object by merging:
+   *   1. `inferred` – rules automatically extracted from class-validator
+   *      constraints (e.g. @MinLength, @IsStrongPassword).
+   *   2. Explicit values from the UI decorator options stored in `meta`.
+   *
+   * Explicit decorator options always win over inferred values.
+   * Returns `undefined` when no rules are present (keeps the JSON lean).
+   *
    * @internal
    */
-  private buildValidations(meta: UIFieldMetadata): UIValidationRules | undefined {
-    const v: UIValidationRules = {};
-    let hasRules = false;
+  private buildValidations(
+    meta: UIFieldMetadata,
+    inferred: Partial<UIValidationRules> = {},
+  ): UIValidationRules | undefined {
+    // Start from inferred values; explicit options overwrite them.
+    const v: UIValidationRules = { ...inferred };
+    let hasRules = Object.keys(inferred).length > 0;
 
     if (meta.required !== undefined) {
       v.required = meta.required;
       hasRules = true;
     }
     if (meta.minLength !== undefined) {
-      v.minLength = meta.minLength;
+      v.minLength = meta.minLength; // explicit wins
       hasRules = true;
     }
     if (meta.maxLength !== undefined) {
@@ -199,7 +224,7 @@ export class SchemaGeneratorService {
       hasRules = true;
     }
     if (meta.pattern !== undefined) {
-      v.pattern = meta.pattern;
+      v.pattern = meta.pattern; // explicit wins
       hasRules = true;
     }
 

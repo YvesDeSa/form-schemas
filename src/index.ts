@@ -54,6 +54,13 @@ export {
 export type { GenerateOptions } from './schema-generator.service';
 export { SchemaGeneratorService } from './schema-generator.service';
 
+// ── class-validator Bridge (optional integration) ─────────────────────────────
+export type { StrongPasswordOptions } from './class-validator-bridge';
+export {
+  inferValidationsFromClassValidator,
+  buildStrongPasswordPattern,
+} from './class-validator-bridge';
+
 // ── NestJS Module ────────────────────────────────────────────────────────────
 export type {
   SchemaModuleOptions,
