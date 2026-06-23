@@ -1,5 +1,1 @@
 blank_issues_enabled: false
-contact_links:
-  - name: "\U0001F4AC Questions & Discussions"
-    url: https://github.com/YvesDeSa/form-schemas/discussions
-    about: For general questions, please use GitHub Discussions instead of opening an issue.
