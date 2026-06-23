@@ -227,6 +227,11 @@ export class SchemaGeneratorService {
       v.pattern = meta.pattern; // explicit wins
       hasRules = true;
     }
+    const metaStep = (meta as unknown as { step?: number | 'any' }).step;
+    if (metaStep !== undefined) {
+      v.step = metaStep; // explicit wins
+      hasRules = true;
+    }
 
     return hasRules ? v : undefined;
   }

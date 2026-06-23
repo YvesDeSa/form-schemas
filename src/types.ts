@@ -84,6 +84,12 @@ export interface UIValidationRules {
   max?: number | string;
   /** Regex string validated natively by the browser. */
   pattern?: string;
+  /**
+   * Numeric step interval for `<input type="number">`.
+   * Use `1` to restrict to integers (@IsInt), or any decimal for fixed precision.
+   * Maps directly to the HTML `step` attribute.
+   */
+  step?: number | 'any';
 }
 
 // ─────────────────────────────────────────────

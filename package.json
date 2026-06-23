@@ -1,6 +1,6 @@
 {
   "name": "@dsyves/form-schema",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Server-Driven UI form schema generator for NestJS. Reads UI decorators on DTO classes and produces typed, frontend-ready JSON form schemas. Optionally integrates with class-validator to automatically infer validation rules.",
   "author": {
     "name": "Yves de Sá Barbosa",
