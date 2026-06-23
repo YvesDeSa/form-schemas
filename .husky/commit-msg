@@ -1,0 +1,20 @@
+
+
+node -e "
+const fs = require('fs');
+// Ignora commits de merge ou vazios
+if (!process.argv[1]) process.exit(0);
+const msg = fs.readFileSync(process.argv[1], 'utf8').trim();
+
+// Matches emoji (unicode) or :shortcode: at the start
+const regex = /^(\p{Emoji}|:[a-z0-9_]+:)\s+/u;
+
+if (!regex.test(msg)) {
+  console.error('\n❌ Mensagem de commit invalida.');
+  console.error('O commit deve comecar com um Gitmoji (unicode ou :shortcode:), seguido de um espaco e a descricao.');
+  console.error('\nExemplos validos:');
+  console.error('  ✨ add automatic schema validation');
+  console.error('  :sparkles: fix duplicate validation bug\n');
+  process.exit(1);
+}
+" "$1"
