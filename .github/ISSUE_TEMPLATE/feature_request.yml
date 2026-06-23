@@ -1,0 +1,68 @@
+name: "\U0001F680 Feature Request"
+description: Have an idea to improve the library? Share it here.
+title: "[Feature]: "
+labels: ["enhancement", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting an improvement!
+        Feature requests that include a clear use case and proposed solution are much easier to evaluate.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Is your feature request related to a problem?
+      description: A clear description of the problem you're trying to solve.
+      placeholder: |
+        Currently I have to duplicate validation logic between @UIPassword and @IsStrongPassword,
+        which means any change needs to be made in two places and can cause inconsistencies...
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Describe the solution you'd like
+      description: A clear description of what you want to happen.
+      placeholder: |
+        The SchemaGeneratorService should automatically read the options from @IsStrongPassword
+        and inject the corresponding minLength and pattern into the schema, so I only need to
+        declare the constraint once.
+    validations:
+      required: true
+
+  - type: textarea
+    id: example
+    attributes:
+      label: Usage Example
+      description: Show how the feature would look in practice (before vs after).
+      render: typescript
+      placeholder: |
+        // Before (duplicated)
+        @UIPassword({ label: 'Password', minLength: 8, pattern: '...' })
+        @IsStrongPassword({ minLength: 8 })
+        password: string;
+
+        // After (DRY)
+        @UIPassword({ label: 'Password' })
+        @IsStrongPassword({ minLength: 8 })
+        password: string;
+    validations:
+      required: false
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Any alternative solutions or workarounds you've considered.
+    validations:
+      required: false
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Any other context, links, or references.
+    validations:
+      required: false

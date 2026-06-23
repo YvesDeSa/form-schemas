@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "Running pre-commit checks (typecheck & lint-staged)..."
+
+# Run type check on the whole project
+npm run typecheck
+
+# Run lint-staged (if you add ESLint/Prettier later, this will pick it up)
+npx lint-staged

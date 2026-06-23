@@ -1,0 +1,90 @@
+name: "\U0001F41B Bug Report"
+description: Found a bug? Report it here so we can fix it.
+title: "[Bug]: "
+labels: ["bug", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+        Please provide as much detail as possible to help us reproduce and fix the issue.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: A clear and concise description of what the bug is.
+      placeholder: "When I use @UIEmail + @IsEmail on a DTO property, the generated schema does not include..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: Minimal code to reproduce the issue.
+      render: typescript
+      placeholder: |
+        class MyDto {
+          @UIEmail({ label: 'E-mail' })
+          @IsEmail()
+          email: string;
+        }
+
+        const schema = generator.generate(MyDto, { currentMode: 'create' });
+        console.log(schema); // unexpected output here
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What did you expect to happen?
+      placeholder: "The schema should include a `pattern` field in `validations`."
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      description: What actually happened? Include error messages or unexpected JSON output.
+      placeholder: "The `validations` object is missing the `pattern` field entirely."
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Package Version
+      description: What version of `@dsyves/form-schema` are you using?
+      placeholder: "0.3.1"
+    validations:
+      required: true
+
+  - type: input
+    id: node-version
+    attributes:
+      label: Node.js Version
+      placeholder: "20.x"
+    validations:
+      required: false
+
+  - type: dropdown
+    id: class-validator
+    attributes:
+      label: Are you using class-validator?
+      options:
+        - "Yes"
+        - "No"
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Any other context, screenshots, or information that might help.
+    validations:
+      required: false
